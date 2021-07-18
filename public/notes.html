@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Note Taker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/assets/css/notes-style.css"/>
+  </head>
+
+  <body>
+    <div class="grid-container">
+        <div class="saveBtn fa fa-floppy-o"></div>
+      </header>
+      <section></section>
+      <textarea id="new-note" type="text"></textarea>
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript">
+  const saveBtn = document.querySelector('.saveBtn');
+  saveBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // Retrieve textarea input
+    let newNote = {
+      noteTitle: document.getElementById('note-title').value.trim(),
+      noteContent: document.getElementById('note-content').value.trim(),
+    };
+    fetch('/api/notes', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(newNote),
+    })
+      .then((res) => res.json())
+      .then((data) => {//write to db.json
+        
+      })
+      .catch((err) => {
+        console.error('An error occurred -', err);
+      });
+  });
+</script>
