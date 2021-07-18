@@ -12,6 +12,7 @@
     <div class="grid-container">
       <header><h3>Note Taker</h3>
         <div class="saveBtn fa fa-floppy-o"></div>
+        <a href="/api/notes">Raw Notes</a>
       </header>
       <section>
         <ul id="my-notes" class="list-group">
@@ -23,9 +24,6 @@
         <textarea id="note-content" type="text" placeholder="Note Text"></textarea>
       </main>
     </div>
-  </body>
-</html>
-
 <script type="text/javascript">
   const saveBtn = document.querySelector('.saveBtn');
   saveBtn.addEventListener('click', (e) => {
@@ -43,16 +41,16 @@
     })
       .then((res) => res.json())
       .then((data) => {//write to db.json
-        console.log('writing');
+        console.log(data);
         
       })
       .catch((err) => {
-        //console.error('An error occurred -', err);
+        console.log('An error occurred in POST -', err);
       });
   });
 
   const notesQuery = () => {
-      fetch('/api/tables', {
+      fetch('/api/notes', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -60,15 +58,21 @@
       })
         .then((res) => res.json())
         .then((notesData) => {
-          for (let i = 0; i < notesData.length; i++) {
-            let myNotes = document.getElementById('#my-notes');
+          console.log(notesData);
+          for (noteObj of notesData) {
+            let myNotes = document.getElementById('my-notes');
             let note = document.createElement('li');
-            note.textContent = `${notesData[i].noteTitle}`;
+            note.classList.add('list-group-item');
+            note.style.fontSize = "1.5rem";
+            note.textContent = `${noteObj.noteTitle}`;
             myNotes.appendChild(note);
           }
         })
-        .catch((error) => {
-          console.error('An error occurred -', err);
+        .catch((err) => {
+          console.log('An error occurred in GET -', err);
         });
     };
+    notesQuery();
 </script>
+</body>
+</html>
