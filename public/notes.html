@@ -13,10 +13,14 @@
       <header><h3>Note Taker</h3>
         <div class="saveBtn fa fa-floppy-o"></div>
       </header>
-      <section></section>
+      <section>
+        <ul id="my-notes" class="list-group">
+          <li class="list-group-item"></li>
+        </ul>
+      </section>
       <main>
-        <textarea id="note-title" type="text"></textarea>
-        <textarea id="note-content" type="text"></textarea>
+        <textarea id="note-title" type="text" placeholder="Note Title"></textarea>
+        <textarea id="note-content" type="text" placeholder="Note Text"></textarea>
       </main>
     </div>
   </body>
@@ -43,7 +47,28 @@
         
       })
       .catch((err) => {
-        console.error('An error occurred -', err);
+        //console.error('An error occurred -', err);
       });
   });
+
+  const notesQuery = () => {
+      fetch('/api/tables', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((notesData) => {
+          for (let i = 0; i < notesData.length; i++) {
+            let myNotes = document.getElementById('#my-notes');
+            let note = document.createElement('li');
+            note.textContent = `${notesData[i].noteTitle}`;
+            myNotes.appendChild(note);
+          }
+        })
+        .catch((error) => {
+          console.error('An error occurred -', err);
+        });
+    };
 </script>
