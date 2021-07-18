@@ -5,15 +5,19 @@
     <title>Note Taker</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/assets/css/notes-style.css"/>
+    <link rel="stylesheet" type="text/css"   href="css/notes-style.css"/>
   </head>
 
   <body>
     <div class="grid-container">
+      <header><h3>Note Taker</h3>
         <div class="saveBtn fa fa-floppy-o"></div>
       </header>
       <section></section>
-      <textarea id="new-note" type="text"></textarea>
+      <main>
+        <textarea id="note-title" type="text"></textarea>
+        <textarea id="note-content" type="text"></textarea>
+      </main>
     </div>
   </body>
 </html>
@@ -35,6 +39,7 @@
     })
       .then((res) => res.json())
       .then((data) => {//write to db.json
+        console.log('writing');
         
       })
       .catch((err) => {

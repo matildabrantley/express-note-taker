@@ -1,0 +1,65 @@
+body {
+    
+}
+
+.grid-container {
+    display: grid;
+  
+    grid-template-areas:
+      "header header header"
+      "notes new new"
+      "notes new new";
+  
+    grid-template-columns: 0.5fr 1fr 1fr;
+    grid-template-rows: 0.1fr auto auto;
+    grid-gap: 0px;
+  
+    height: 95vh;
+    width: 95vw;
+
+    margin-top: 2.5vh;
+    margin-bottom: 2.5vh;
+    margin-left: 2.5vw;
+    margin-right: 2.5vw;
+  }
+
+header {
+    grid-area: header;
+    background-color:gray;
+    color: white;
+}
+
+header h3 {
+    margin: 1rem;
+}
+
+header .saveBtn {
+    font-size: xx-large;
+    float: right;
+    margin: 20px;
+}
+
+section {
+    grid-area: notes;
+    color: black;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+main {
+    grid-area: new;
+}
+  
+#note-title {
+    font-size: 5rem;
+    background: transparent;
+    border: none;
+    resize: none;
+    padding: 10px;
+}
+#note-content {
+    font-size: 1rem;
+    background: transparent;
+    border: none;
+    resize: none;
+}
