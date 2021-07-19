@@ -9,21 +9,16 @@ module.exports = (app) => {
     res.sendFile(path.join(__dirname, '../public/notes.html'));
   });
 
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.join(__dirname, '../public/index.html'));
-  // });
-
   //API Routing
    app.get('/api/notes', (req, res) => res.json(notesData));
 
   app.post('/api/notes', (req, res) => {
     let filePath = path.join(__dirname, '../public/db.json');
     notesData.push(req.body);
-    fs.writeFile(filePath, JSON.stringify(notesData), function() {
-      res.end();
-    });
+    fs.writeFile(filePath, JSON.stringify(notesData), function() {});
   });
   
+  // using fs.appendFile
   // app.post('/api/notes', (req, res) => {
   //   let filePath = path.join(__dirname, '../public/db.json');
   //   fs.appendFile(filePath, JSON.stringify(req.body), function() {

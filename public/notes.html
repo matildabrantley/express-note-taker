@@ -5,14 +5,14 @@
     <title>Note Taker</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css"   href="css/notes-style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/notes-style.css"/>
   </head>
 
   <body>
     <div class="grid-container">
-      <header><h3>Note Taker</h3>
+      <header class="bg-secondary"><h3>Note Taker</h3>
         <div class="saveBtn fa fa-floppy-o"></div>
-        <a href="/api/notes">Raw Notes</a>
+        <!-- <a href="/api/notes">Raw Notes</a> -->
       </header>
       <section>
         <ul id="my-notes" class="list-group">
@@ -23,26 +23,33 @@
         <textarea id="note-content" type="text" placeholder="Note Text"></textarea>
       </main>
     </div>
+    <button id="clear" type="button" class="btn btn-dark">Clear Notes</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
-  
-  //appends notes to #my-notes list
-  const addNotes = (notesData) => {
-      for (noteObj of notesData) {
-        let myNotes = $('#my-notes');
-        let note = $(document.createElement('li'));
-        note.addClass('list-group-item');
-        note.css('fontSize', '1.5rem');
-        note.text(`${noteObj.noteTitle}`);
-        note.text(`${noteObj.noteContent}`);
-        note.on("click", noteObj, function(e) {
-          document.getElementById('note-title').textContent = e.data.noteTitle;
-          document.getElementById('note-content').textContent = e.data.noteContent;
-        });  
-        myNotes.append(note); 
-      }
+
+  function addNote(noteObject) {
+    //create list item with event listener and bootstrap style
+    let note = $(document.createElement('li'));
+    console.log(noteObject);
+    note.addClass('list-group-item');
+    note.css('fontSize', '1.5rem');
+    note.text(`${noteObject.noteTitle}`);
+    note.on("click", noteObject, function(e) {
+      $('#note-title').text(e.data.noteTitle);
+      $('#note-content').text(e.data.noteContent);
+    });  
+    $('#my-notes').append(note);
+  }
+
+  //appends notes to #my-notes list when passed array of JSON objects
+  const addAllNotes = (notesData) => {
+      //clear out previous notes first
+      $('#my-notes').empty();
+      //add each note
+      for (noteObj of notesData) addNote(noteObj);
     }
 
+  //POST to server
   const saveBtn = $(document.querySelector('.saveBtn'));
   saveBtn.on('click', (e) => {
     e.preventDefault();
@@ -52,6 +59,11 @@
       noteTitle: document.getElementById('note-title').value.trim(),
       noteContent: document.getElementById('note-content').value.trim(),
     };
+    addNote(newNote);
+    document.getElementById('note-title').value = "";
+    document.getElementById('note-content').value = "";
+    
+
     fetch('/api/notes', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -59,14 +71,13 @@
     })
       .then((res) => res.json()) //write to db.json
       .then((data) => {
-        console.log(data);
-        
-      })
+    })
       .catch((err) => {
         console.log('An error occurred in POST -', err);
       });
   });
 
+  //GET from server
   const notesQuery = () => {
       fetch('/api/notes', {
         method: 'GET',
@@ -75,12 +86,15 @@
         },
       })
         .then((res) => res.json())
-        .then((notesData) => addNotes(notesData))
+        .then((notesData) => addAllNotes(notesData))
         .catch((err) => {
           console.log('An error occurred in GET -', err);
         });
     };
+    //Get notes from db.json file
     notesQuery();
+
+    $('#clear').on('click', () => $('#my-notes').empty());
 </script>
 </body>
 </html>
