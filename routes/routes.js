@@ -15,17 +15,6 @@ module.exports = (app) => {
 
   //API Routing
    app.get('/api/notes', (req, res) => res.json(notesData));
-   
-  // app.get('/api/notes', (req, res) => {
-  //   let filePath = path.join(__dirname, '../public/db.json');
-  //   fs.readFile(filePath, 'utf8', (err, data) => {
-  //     if (err) {
-  //       throw err;
-  //     }
-  //     res.send(JSON.parse(data));
-  //   });
-  //   //res.json(filePath);
-  // });
 
   app.post('/api/notes', (req, res) => {
     let filePath = path.join(__dirname, '../public/db.json');
@@ -34,6 +23,7 @@ module.exports = (app) => {
       res.end();
     });
   });
+  
   // app.post('/api/notes', (req, res) => {
   //   let filePath = path.join(__dirname, '../public/db.json');
   //   fs.appendFile(filePath, JSON.stringify(req.body), function() {

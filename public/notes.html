@@ -16,7 +16,6 @@
       </header>
       <section>
         <ul id="my-notes" class="list-group">
-          <li class="list-group-item"></li>
         </ul>
       </section>
       <main>
@@ -24,9 +23,28 @@
         <textarea id="note-content" type="text" placeholder="Note Text"></textarea>
       </main>
     </div>
-<script type="text/javascript">
-  const saveBtn = document.querySelector('.saveBtn');
-  saveBtn.addEventListener('click', (e) => {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  
+  //appends notes to #my-notes list
+  const addNotes = (notesData) => {
+      for (noteObj of notesData) {
+        let myNotes = $('#my-notes');
+        let note = $(document.createElement('li'));
+        note.addClass('list-group-item');
+        note.css('fontSize', '1.5rem');
+        note.text(`${noteObj.noteTitle}`);
+        note.text(`${noteObj.noteContent}`);
+        note.on("click", noteObj, function(e) {
+          document.getElementById('note-title').textContent = e.data.noteTitle;
+          document.getElementById('note-content').textContent = e.data.noteContent;
+        });  
+        myNotes.append(note); 
+      }
+    }
+
+  const saveBtn = $(document.querySelector('.saveBtn'));
+  saveBtn.on('click', (e) => {
     e.preventDefault();
 
     // Retrieve textarea input
@@ -39,8 +57,8 @@
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(newNote),
     })
-      .then((res) => res.json())
-      .then((data) => {//write to db.json
+      .then((res) => res.json()) //write to db.json
+      .then((data) => {
         console.log(data);
         
       })
@@ -57,17 +75,7 @@
         },
       })
         .then((res) => res.json())
-        .then((notesData) => {
-          console.log(notesData);
-          for (noteObj of notesData) {
-            let myNotes = document.getElementById('my-notes');
-            let note = document.createElement('li');
-            note.classList.add('list-group-item');
-            note.style.fontSize = "1.5rem";
-            note.textContent = `${noteObj.noteTitle}`;
-            myNotes.appendChild(note);
-          }
-        })
+        .then((notesData) => addNotes(notesData))
         .catch((err) => {
           console.log('An error occurred in GET -', err);
         });
